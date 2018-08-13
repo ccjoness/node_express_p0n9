@@ -1,0 +1,15 @@
+html
+    head
+        title Person
+    body
+        if(type === "error")
+            h3(style = "color:red") #{message}
+        else
+            h3 New person added!
+            ul
+                li
+                    |name: #{person.name}
+                li
+                    |age: #{person.age}
+                li
+                    |nationality: #{person.nationality}

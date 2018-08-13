@@ -1,0 +1,177 @@
+doctype html
+html
+    head
+        title #{gameName}
+        style.
+            canvas {
+                background: #000000;
+                display: block;
+                margin: 0 auto;
+            }
+
+            article {
+                text-align: center;
+            }
+
+body
+    div(id="content")
+        article
+            h1 #{gameName}
+            canvas(id="p0n9" width="480" height="320")
+            div(id='chatBox')
+            div(id='chatInputDiv')
+                input(type=text id='chatInput')
+                button(id='chatSubmit') Enter
+
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js")
+    script(src="https://code.jquery.com/jquery-3.3.1.min.js")
+    script.
+        const gameUrl = '#{gameName}'
+        const socket = io('/' + gameUrl);
+        let role = 'spectator'
+
+        socket.on('message', function (data) {
+            if (data.openSpot) {
+                let html = `<button id="joinGame">Join Game</button>`
+                $('#content').append(html)
+                $('#joinGame').click(function (e) {
+
+                    // console.log('click')
+                    socket.emit('join-game', {
+                        message: 'request'
+                    })
+                    $(this.remove())
+                })
+            }
+        });
+        socket.on('game-joined', function (data) {
+            if (data.status === 'success'){
+                role = data.role
+            }
+        })
+        let canvas = document.querySelector('#p0n9');
+        let ctx = canvas.getContext('2d');
+        let x = canvas.width / 2;
+        let y = canvas.height - 30;
+        let ballRadius = 10;
+
+        let player1Height = 75;
+        let player1Width = 10;
+        let player1Y = (canvas.height - player1Height) / 2;
+        let player1Score = 0;
+
+
+        let player2Height = 75;
+        let player2Width = 10;
+        let player2Y = (canvas.height - player2Height) / 2;
+        let player2Score = 0;
+        let player2Up = false;
+        let player2Down = false;
+
+
+
+
+        function player(offset, w, h, y) {
+            ctx.beginPath();
+            ctx.rect(offset, y, w, h);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function ball(x, y, ballRadius) {
+            ctx.beginPath();
+            ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function board() {
+            //clear board
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // base board lines
+            ctx.beginPath();
+            ctx.rect(canvas.width / 2, 0, 10, canvas.height);
+            ctx.fillStyle = "#464646";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+
+        socket.on('game-frame', function (data) {
+            // console.log(data)
+            x = data.x;
+            y = data.y;
+            player1Y = data.player1Y;
+            player2Y = data.player2Y;
+            render()
+        })
+        function render() {
+            board()
+
+            // Render Score
+            let p1Text = `Player 1 Score: ${player1Score}`;
+            let p1TextW = ctx.measureText(p1Text).width;
+
+            let p2Text = `Player 2 Score: ${player2Score}`;
+            let p2TextW = ctx.measureText(p2Text).width;
+
+            ctx.beginPath();
+            ctx.font = '15px serif';
+            ctx.fillStyle = "#ff0000";
+            ctx.fillText(p1Text, (canvas.width / 4) - (p1TextW / 2), 20);
+            ctx.fillText(p2Text, (canvas.width / 4) * 3 - (p2TextW / 2), 20);
+            ctx.closePath();
+
+            // Render Ball
+            ball(x, y, ballRadius);
+
+            // Render player paddles
+            player(0, player1Width, player1Height, player1Y);
+            player(canvas.width - player2Width, player2Width, player2Height, player2Y);
+
+        }
+
+        function keyDownHandler() {
+            if (role !== 'spectator') {
+                if (event.keyCode === 38) {
+                    socket.emit('player-paddle-change', {
+                        up: true,
+                        keyCode: event.keyCode,
+                        role: role
+                    })
+                } else if (event.keyCode === 40) {
+                    socket.emit('player-paddle-change', {
+                        down: true,
+                        keyCode: event.keyCode,
+                        role: role
+                    })
+                }
+            }
+        }
+
+        function keyUpHandler() {
+            if (role !== 'spectator') {
+                if (event.keyCode === 38) {
+                    socket.emit('player-paddle-change', {
+                        up: false,
+                        keyCode: event.keyCode,
+                        role: role
+                    })
+
+                } else if (event.keyCode === 40) {
+                    socket.emit('player-paddle-change', {
+                        down: false,
+                        keyCode: event.keyCode,
+                        role: role
+                    })
+                }
+            }
+        }
+
+        document.addEventListener('keydown', keyDownHandler, false);
+        document.addEventListener('keyup', keyUpHandler, false);
+
+        // let game = setInterval(render, 10);
