@@ -1,0 +1,33 @@
+body {
+    background-color: black;
+    color: azure;
+}
+#content {
+    width: 94%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.row {
+    display: flex;
+}
+.half {
+    border: 1px solid wheat;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+canvas {
+    background: #000000;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid white;
+}
+
+.center {
+    text-align: center;
+}
+
+#joinGameDiv {
+    margin: 10px auto 10px auto;
+    text-align: left;
+}

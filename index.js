@@ -170,7 +170,9 @@ class Game {
                     x: _game.gameData.x,
                     y: _game.gameData.y,
                     player1Y: _game.player1.y,
-                    player2Y: _game.player2.y
+                    player2Y: _game.player2.y,
+                    player1Name: _game.player1.name,
+                    player2Name: _game.player2.name,
                 })
             }, 10)
         });

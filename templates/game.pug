@@ -2,26 +2,18 @@ doctype html
 html
     head
         title #{gameName}
-        style.
-            canvas {
-                background: #000000;
-                display: block;
-                margin: 0 auto;
-            }
-
-            article {
-                text-align: center;
-            }
-
+        style
+            include ../public/css/style.css
 body
     div(id="content")
-        article
+        article.center
             h1 #{gameName}
             canvas(id="p0n9" width="480" height="320")
-            div(id='chatBox')
-            div(id='chatInputDiv')
-                input(type=text id='chatInput')
-                button(id='chatSubmit') Enter
+            div#joinGameDiv
+            //div(id='chatBox')
+            //div(id='chatInputDiv')
+                //input(type=text id='chatInput')
+                //button(id='chatSubmit') Enter
 
     script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js")
     script(src="https://code.jquery.com/jquery-3.3.1.min.js")
@@ -30,10 +22,31 @@ body
         const socket = io('/' + gameUrl);
         let role = 'spectator'
 
+
+        let canvas = document.querySelector('#p0n9');
+        let ctx = canvas.getContext('2d');
+        let x = canvas.width / 2;
+        let y = canvas.height - 30;
+        let ballRadius = 10;
+
+        let player1Height = 75;
+        let player1Width = 10;
+        let player1Y = (canvas.height - player1Height) / 2;
+        let player1Score = 0;
+        let player1Name = 'none'
+
+
+        let player2Height = 75;
+        let player2Width = 10;
+        let player2Y = (canvas.height - player2Height) / 2;
+        let player2Score = 0;
+        let player2Name = 'none'
+
+
         socket.on('message', function (data) {
             if (data.openSpot) {
                 let html = `<button id="joinGame">Join Game</button>`
-                $('#content').append(html)
+                $('#joinGameDiv').append(html).css({'width': canvas.width + 'px'})
                 $('#joinGame').click(function (e) {
 
                     // console.log('click')
@@ -49,27 +62,6 @@ body
                 role = data.role
             }
         })
-        let canvas = document.querySelector('#p0n9');
-        let ctx = canvas.getContext('2d');
-        let x = canvas.width / 2;
-        let y = canvas.height - 30;
-        let ballRadius = 10;
-
-        let player1Height = 75;
-        let player1Width = 10;
-        let player1Y = (canvas.height - player1Height) / 2;
-        let player1Score = 0;
-
-
-        let player2Height = 75;
-        let player2Width = 10;
-        let player2Y = (canvas.height - player2Height) / 2;
-        let player2Score = 0;
-        let player2Up = false;
-        let player2Down = false;
-
-
-
 
         function player(offset, w, h, y) {
             ctx.beginPath();
@@ -106,16 +98,17 @@ body
             y = data.y;
             player1Y = data.player1Y;
             player2Y = data.player2Y;
+            player1Name = data.player1Name;
+            player2Name = data.player2Name;
             render()
         })
         function render() {
             board()
-
             // Render Score
-            let p1Text = `Player 1 Score: ${player1Score}`;
+            let p1Text = `${player1Name === 'None' ? 'Waiting for Player 1': player1Name + ` Score: ${player1Score}`}`;
             let p1TextW = ctx.measureText(p1Text).width;
 
-            let p2Text = `Player 2 Score: ${player2Score}`;
+            let p2Text = `${player2Name === 'None' ? 'Waiting for Player 2': player2Name + ` Score: ${player2Score}`}`;
             let p2TextW = ctx.measureText(p2Text).width;
 
             ctx.beginPath();
