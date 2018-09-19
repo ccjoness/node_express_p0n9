@@ -66,6 +66,7 @@ class Game {
         let _game = this;
 
         this.gameFrame = function () {
+            // Player 1 paddle bounds and point check
             if (_game.gameData.x + _game.gameData.dx - _game.gameData.ballRadius < _game.player1.width) {
                 if (_game.gameData.x + _game.gameData.dx - _game.gameData.ballRadius < 0) {
                     _game.player2.score += 1;
@@ -78,7 +79,7 @@ class Game {
             // Player 2 paddle bounds and point check
             if (_game.gameData.x + _game.gameData.dx + _game.gameData.ballRadius > _game.canvasData.width - _game.player2.width) {
                 if (_game.gameData.x + _game.gameData.dx + _game.gameData.ballRadius > _game.canvasData.width) {
-                    _game.player2.score += 1;
+                    _game.player1.score += 1;
                     _game.gameData.x = _game.canvasData.width / 2;
                 } else if (_game.gameData.y > _game.player2.y && _game.gameData.y < _game.player2.y + _game.player2.height && _game.gameData.dx > 0) {
                     _game.gameData.dx = -_game.gameData.dx;
@@ -140,7 +141,6 @@ class Game {
                     _game.player1.name = 'Player1';
                     socket.nickname = 'Player1';
                     _game.player1.socketId = socket.id;
-                    console.log('we got here at least');
                     user.emit('game-joined', {
                         status: 'success',
                         role: 'Player1'
@@ -173,6 +173,8 @@ class Game {
                     player2Y: _game.player2.y,
                     player1Name: _game.player1.name,
                     player2Name: _game.player2.name,
+                    player1Score: _game.player1.score,
+                    player2Score: _game.player2.score,
                 })
             }, 10)
         });
@@ -228,3 +230,11 @@ app.use(express.static('public'));
 
 
 server.listen(3000);
+
+
+
+
+
+
+
+

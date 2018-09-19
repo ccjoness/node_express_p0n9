@@ -7,11 +7,17 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+#content div {
+    max-width: 600px;
+    margin: 0 auto 0 auto;
+}
 .row {
     display: flex;
 }
+
+
 .half {
-    border: 1px solid wheat;
+    /*border: 1px solid wheat;*/
     width: 50%;
     box-sizing: border-box;
 }
@@ -30,4 +36,19 @@ canvas {
 #joinGameDiv {
     margin: 10px auto 10px auto;
     text-align: left;
+}
+.logo {
+    width: 300px;
+}
+
+.divider {
+    border-bottom: solid 1px #00fd06;
+}
+
+#games {
+    border-right: solid 1px rgba(0, 252, 4, .2);
+}
+
+a {
+    color: #00fd06;
 }

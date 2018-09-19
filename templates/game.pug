@@ -6,6 +6,8 @@ html
             include ../public/css/style.css
 body
     div(id="content")
+        div.center.divider
+            img(src="/img/logo-c.png").logo
         article.center
             h1 #{gameName}
             canvas(id="p0n9" width="480" height="320")
@@ -58,7 +60,7 @@ body
             }
         });
         socket.on('game-joined', function (data) {
-            if (data.status === 'success'){
+            if (data.status === 'success') {
                 role = data.role
             }
         })
@@ -100,15 +102,17 @@ body
             player2Y = data.player2Y;
             player1Name = data.player1Name;
             player2Name = data.player2Name;
+            player1Score = data.player1Score
+            player2Score = data.player2Score
             render()
         })
         function render() {
             board()
             // Render Score
-            let p1Text = `${player1Name === 'None' ? 'Waiting for Player 1': player1Name + ` Score: ${player1Score}`}`;
+            let p1Text = `${player1Name === 'None' ? 'Waiting for Player 1' : player1Name + ` Score: ${player1Score}`}`;
             let p1TextW = ctx.measureText(p1Text).width;
 
-            let p2Text = `${player2Name === 'None' ? 'Waiting for Player 2': player2Name + ` Score: ${player2Score}`}`;
+            let p2Text = `${player2Name === 'None' ? 'Waiting for Player 2' : player2Name + ` Score: ${player2Score}`}`;
             let p2TextW = ctx.measureText(p2Text).width;
 
             ctx.beginPath();

@@ -16,13 +16,24 @@ html
         //    br
         //    button(type = "submit") Send my greetings
         div(id="content")
+            div.center
+                img(src="/img/logo-c.png").logo
+            div.divider
+                h3 Directions
+                ul
+                    li Click on a game in the list or Create a new room.
+                    li If there is an open spot in the game you will see a button to join the game.
+                    li You will automatically be assigned to player 1 or player 2.
+                    li Use the up arrow key (&uarr;) and the down arrow key (&darr;) to move your paddle.
             div.row
                 article#games.half
-                    h1 Games
+                    div.center
+                        h1 Games
                     ul(id="gameTable")
                 article#newRoom.half
-                    h1 Create a new room
-                    button(id="new_room") New Room
+                    div.center
+                        h1 Create a new room
+                        button(id="new_room") New Room
 
         script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js")
         script(src="https://code.jquery.com/jquery-3.3.1.min.js")
