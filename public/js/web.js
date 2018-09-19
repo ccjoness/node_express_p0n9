@@ -1,7 +1,7 @@
 //
 
 
-const socket = io.connect('/',{path:'/ws/socket.io'});
+const socket = io.connect('ws://www.thepong.com');
 
 socket.on('games_list', function (data) {
     $('#gameTable').html('');
