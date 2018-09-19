@@ -1,7 +1,7 @@
 //
 
 
-const socket = io.connect('http://localhost:3000');
+const socket = io.connect('/',{path:'/ws/socket.io'});
 
 socket.on('games_list', function (data) {
     $('#gameTable').html('');

@@ -5,7 +5,6 @@ const upload = multer();
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-const mongoose = require('mongoose');
 
 let roomNumber = 1;
 let games = {};
@@ -181,15 +180,6 @@ class Game {
     }
 }
 
-mongoose.connect('mongodb://localhost:27017/p0n9DB', {useNewUrlParser: true});
-
-let personSchema = mongoose.Schema({
-    name: String,
-    age: Number,
-    nationality: String
-});
-
-let Person = mongoose.model("Person", personSchema);
 app.set('view engine', 'pug');
 app.set('views', './templates');
 
