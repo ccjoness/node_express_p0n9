@@ -1,7 +1,7 @@
 //
 
 
-const socket = io.connect('ws://www.thep0n9.com');
+const socket = io.connect('ws://www.thep0n9.com', {secure: true});
 
 socket.on('games_list', function (data) {
     $('#gameTable').html('');
