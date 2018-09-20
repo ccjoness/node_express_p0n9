@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const upload = multer();
 const app = express();
-const server = require('http').Server(app);
+const server = require('https').Server(app);
 const io = require('socket.io')(server);
 
 let roomNumber = 1;
@@ -219,7 +219,8 @@ app.use(upload.array());
 app.use(express.static('public'));
 
 
-server.listen(3000);
+// server.listen(3000);
+server.listen(15604);
 
 
 
